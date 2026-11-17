@@ -78,11 +78,11 @@ body {
   transition: transform 120ms ease, background-color 120ms ease;
 }
 
-.square:disabled {
+.square[aria-disabled="true"] {
   cursor: default;
 }
 
-.square:not(:disabled):hover {
+.square:not([aria-disabled="true"]):hover {
   transform: translateY(-2px);
   background: var(--bg);
 }

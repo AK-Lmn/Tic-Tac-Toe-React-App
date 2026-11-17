@@ -17,8 +17,8 @@ export function Square({ index, value, onPlay, disabled, highlight }: Props) {
     <button
       type="button"
       aria-label={label}
-      disabled={disabled}
-      onClick={() => onPlay(index)}
+      aria-disabled={disabled}
+      onClick={() => !disabled && onPlay(index)}
       className="square"
       data-win={highlight}
     >

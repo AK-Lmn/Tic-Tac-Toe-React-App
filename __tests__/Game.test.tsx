@@ -45,7 +45,7 @@ describe("<Game />", () => {
   it("disables every square after a win so the board cannot change", async () => {
     render(<Game />);
     const user = await play(CAT_WINS);
-    squares().forEach((s) => expect(s).toBeDisabled());
+    squares().forEach((s) => expect(s).toHaveAttribute("aria-disabled", "true"));
     await user.click(sq(3, 3));
     expect(sq(3, 3)).toHaveTextContent("");
   });
@@ -104,5 +104,15 @@ describe("win highlight", () => {
     await play(CAT_WINS);
     const won = squares().filter((s) => s.getAttribute("data-win") === "true");
     expect(won).toEqual([sq(1, 1), sq(1, 2), sq(1, 3)]);
+  });
+});
+
+describe("keyboard focus", () => {
+  it("keeps focus on a square after it is played with Enter", async () => {
+    render(<Game />);
+    const user = userEvent.setup();
+    sq(1, 1).focus();
+    await user.keyboard("{Enter}");
+    expect(sq(1, 1)).toHaveFocus();
   });
 });
