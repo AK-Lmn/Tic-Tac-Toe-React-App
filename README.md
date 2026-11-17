@@ -2,7 +2,7 @@
 
 A two-player Tic-Tac-Toe game built with Next.js, React 19 and Tailwind CSS. Cat plays first, Dog second. The game announces a winner or a draw, highlights the winning line, and keeps a running score across games. **New Game** clears the board and keeps the score; the player who didn't open the last game opens the next one.
 
-Live: _add the Vercel production URL here after deploying_
+Live: https://tic-tac-toe-react-app-sigma.vercel.app
 
 ![Cat wins](docs/screenshots/03-cat-wins.jpg)
 
