@@ -8,18 +8,18 @@
 
 **Tech Stack:** Next.js (App Router) + React 19, TypeScript, Tailwind CSS, Vitest + React Testing Library + user-event, Vercel.
 
-**Spec:** Notion "Test 1: Tic-Tac-Toe React App" (https://tremendous-tiger-a4a.notion.site/Test-1-Tic-Tac-Toe-React-App-22200bbdfc3b80d089deee909ae597e4). Submission form: https://apply.capm.us
+**Spec:** A two-player web Tic-Tac-Toe game. The requirements are listed under Global Constraints below.
 
 ## Global Constraints
 
-- Stack: React + Next.js, deployed on Vercel. Submit the public production URL, not a preview URL.
+- Stack: React + Next.js, deployed on Vercel. Share the public production URL, not a preview URL.
 - Two players take turns placing marks on a 3×3 board. X/O, emoji, icons or GIFs are all allowed.
 - The game must show who won, or that it is a draw.
 - A **New Game** button (exact label) starts over.
 - Bonus, optional: a score board counting wins and draws. Included here.
-- GitHub repo must be public. Submission needs screenshots; a demo video is optional.
-- "We love style and personality": theme is a deliberate choice, not default Tailwind gray.
-- Spec suggests Tailwind and shadcn/ui; shadcn is optional and skipped here (YAGNI, one button).
+- GitHub repo must be public, with screenshots of the game.
+- Style and personality matter: the theme is a deliberate choice, not default Tailwind gray.
+- Tailwind CSS is used; shadcn/ui is optional and skipped here (YAGNI, one button).
 
 ## Review Focus
 
@@ -283,13 +283,13 @@ git push -u origin main
 Run: `npx vercel --prod`
 Expected: prints a production URL. Open it and play one full game, one draw, and New Game. Use the production alias, not the preview URL.
 
-- [ ] **Step 4: Submit** at https://apply.capm.us: pick "1) Tic-Tac-Toe", paste the live URL and repo URL, upload screenshots, add an optional Loom link and a short note. The user submits; the form is theirs to fill.
+- [ ] **Step 4: Share** the live URL, the repo URL and the screenshots. The user does this step.
 
 ---
 
 ## Self-Review
 
-- **Spec coverage:** turns on 3×3 (T2–T4), win/draw display (T2, T4), New Game (T4), bonus scores (T3, T4), style/personality (T5), Vercel + public repo + screenshots + submission (T6). No gaps.
+- **Spec coverage:** turns on 3×3 (T2–T4), win/draw display (T2, T4), New Game (T4), bonus scores (T3, T4), style/personality (T5), Vercel + public repo + screenshots + sharing (T6). No gaps.
 - **Type consistency:** `Player`, `Board`, `Result`, `Scores`, `GameState`, `GameAction` defined in T2/T3 and used with the same names in T4. `MARKS` names (Cat/Dog) match the test strings.
 - **Review Focus:** items 1–4 pinned in T2/T3/T4 tests; item 5 pinned by the keyboard test in T4 and the manual width check in T5.
 - **Proportion:** logic is small; plan stays signatures and assertions, no function bodies.
