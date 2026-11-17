@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-17T00:00:00Z",
+  "title": "Design System: Tic-Tac-Toe",
+  "extensions": {
+    "colorMeta": {
+      "paper": { "role": "neutral", "displayName": "Sheet Paper", "canonical": "#fafaf6", "tonalRamp": ["#2a2a27", "#4d4d49", "#76766f", "#a3a39d", "#c8c8c2", "#e1e1db", "#f1f1ea", "#fafaf6"] },
+      "paper-night": { "role": "neutral", "displayName": "Night Sheet", "canonical": "#0c0e1a", "tonalRamp": ["#0c0e1a", "#161929", "#222639", "#33384f", "#4d5470", "#747b99", "#a3a9c2", "#d3d6e3"] },
+      "ink": { "role": "neutral", "displayName": "Marker Ink", "canonical": "#121212", "tonalRamp": ["#121212", "#262626", "#3d3d3d", "#595959", "#7a7a7a", "#a0a0a0", "#c8c8c8", "#ececec"] },
+      "ink-night": { "role": "neutral", "displayName": "Night Ink", "canonical": "#f4f2ea", "tonalRamp": ["#4a4944", "#68675f", "#86857b", "#a3a299", "#bdbcb3", "#d3d2c9", "#e5e4db", "#f4f2ea"] },
+      "signal-orange": { "role": "primary", "displayName": "Signal Orange", "canonical": "#ff4a1c", "tonalRamp": ["#4d1306", "#7a1f0a", "#a82c10", "#d63a16", "#ff4a1c", "#ff7a57", "#ffa68f", "#ffd3c7"] },
+      "signal-orange-night": { "role": "primary", "displayName": "Signal Orange (night)", "canonical": "#ff6a3d", "tonalRamp": ["#4d1b0a", "#7a2d12", "#a84020", "#d6552e", "#ff6a3d", "#ff8c68", "#ffb099", "#ffd7cc"] },
+      "construction-blue": { "role": "neutral", "displayName": "Construction Blue", "canonical": "#2f4bff", "tonalRamp": ["#0a1266", "#10209e", "#1a33d1", "#2f4bff", "#5a72ff", "#8798ff", "#b4bfff", "#dfe3ff"] },
+      "construction-blue-night": { "role": "neutral", "displayName": "Construction Blue (night)", "canonical": "#8a9bff", "tonalRamp": ["#1f2a73", "#2f3fa6", "#4b5fd6", "#6a7df5", "#8a9bff", "#a8b4ff", "#c6cdff", "#e3e6ff"] }
+    },
+    "typographyMeta": {
+      "status": { "displayName": "Status", "purpose": "Whose-turn or result line, with a small drawn mark." },
+      "score": { "displayName": "Score", "purpose": "Tabular counters in the dock." },
+      "action": { "displayName": "Action", "purpose": "New Game bar label." },
+      "wordmark": { "displayName": "Wordmark", "purpose": "Small title above the status line." },
+      "label": { "displayName": "Label", "purpose": "Score captions." }
+    },
+    "shadows": [
+      { "name": "sheet-frame", "value": "inset 0 0 0 1px var(--grid)", "purpose": "1px hairline that closes the outer edge of the ruled grid. Not elevation." }
+    ],
+    "motion": [
+      { "name": "ease", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Single easing for every transition and draw-on." },
+      { "name": "mark-draw", "value": "200ms, 28ms stagger per stroke", "purpose": "Marks drawing on at play." },
+      { "name": "hash-draw", "value": "420ms, 70ms stagger", "purpose": "Board dividers drawing on at load." },
+      { "name": "strike-draw", "value": "300ms, 220ms delay, 40ms stagger", "purpose": "Orange win strike." },
+      { "name": "state-fade", "value": "120ms (tint, ghost), 240ms (mark dim)", "purpose": "Hover, press, win dimming (0.4 losers, 0.6 draw)." }
+    ],
+    "breakpoints": []
+  },
+  "components": [
+    {
+      "name": "New Game Button",
+      "kind": "button",
+      "refersTo": "button-new-game",
+      "description": "Full-width ink bar; flips to orange on hover and press.",
+      "html": "<button class=\"ds-new-game\">New Game</button>",
+      "css": ".ds-new-game { width: 100%; padding: 0.95rem 1rem; background: var(--ink, #121212); color: var(--paper, #fafaf6); font-weight: 600; font-size: 1rem; text-align: left; border: 0; border-radius: 0; cursor: pointer; transition: background-color 120ms cubic-bezier(0.16,1,0.3,1), color 120ms cubic-bezier(0.16,1,0.3,1), transform 90ms cubic-bezier(0.16,1,0.3,1); } .ds-new-game:hover { background: var(--accent, #ff4a1c); color: var(--on-accent, #121212); } .ds-new-game:active { background: var(--accent, #ff4a1c); color: var(--on-accent, #121212); transform: translateY(1px); } .ds-new-game:focus-visible { outline: 3px solid var(--ink, #121212); outline-offset: 3px; }"
+    },
+    {
+      "name": "Board Square",
+      "kind": "custom",
+      "refersTo": "square",
+      "description": "Transparent cell button; tints on hover, shows a ghost X on hover.",
+      "html": "<button class=\"ds-square\" aria-label=\"Square 1,1, empty\"><svg class=\"ds-ghost\" viewBox=\"0 0 100 100\" width=\"78\" height=\"78\" aria-hidden=\"true\"><path d=\"M20 18L82 84M80 20L22 82\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"5\" stroke-linecap=\"round\"/></svg></button>",
+      "css": ".ds-square { width: 120px; aspect-ratio: 1; display: grid; place-items: center; padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--ink, #121212); cursor: pointer; transition: background-color 120ms cubic-bezier(0.16,1,0.3,1); } .ds-ghost { opacity: 0; transition: opacity 120ms cubic-bezier(0.16,1,0.3,1); } .ds-square:hover { background: var(--tint, rgba(47,75,255,0.09)); } .ds-square:hover .ds-ghost { opacity: 0.16; } .ds-square:active { background: var(--press, rgba(47,75,255,0.18)); } .ds-square:active .ds-ghost { opacity: 0.3; } .ds-square:focus-visible { outline: 3px solid var(--ink, #121212); outline-offset: -8px; } .ds-square:focus-visible .ds-ghost { opacity: 0.16; }"
+    },
+    {
+      "name": "Score Row",
+      "kind": "custom",
+      "refersTo": "scoreboard-cell",
+      "description": "Three equal cells divided by ink hairlines, aligned to board columns.",
+      "html": "<dl class=\"ds-score\"><div><dt>X wins</dt><dd>2</dd></div><div><dt>Draws</dt><dd>0</dd></div><div><dt>O wins</dt><dd>1</dd></div></dl>",
+      "css": ".ds-score { display: grid; grid-template-columns: repeat(3, 1fr); border-block: 1px solid var(--ink, #121212); margin: 0; } .ds-score div { padding: 0.6rem 0.75rem 0.5rem; overflow: hidden; } .ds-score div + div { border-left: 1px solid var(--ink, #121212); } .ds-score dt { font-size: 0.8rem; font-weight: 500; } .ds-score dd { margin: 0; font-size: 2rem; font-weight: 700; line-height: 1.15; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Status Line",
+      "kind": "custom",
+      "refersTo": "status",
+      "description": "Whose-turn text led by a small drawn mark.",
+      "html": "<p class=\"ds-status\"><svg viewBox=\"0 0 100 100\" width=\"1.2em\" height=\"1.2em\" aria-hidden=\"true\"><path d=\"M20 18L82 84M80 20L22 82\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"7\" stroke-linecap=\"round\"/></svg><span>X's turn</span></p>",
+      "css": ".ds-status { display: inline-flex; align-items: center; gap: 0.6rem; margin: 0; font-weight: 800; font-size: clamp(1.6rem, 8cqw, 2.4rem); letter-spacing: -0.02em; line-height: 1.1; color: var(--ink, #121212); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Construction Sheet",
+    "overview": "An exact grid with a wild hand on it. The sheet is ruled in faint blue construction hairlines that divide the space into square cells; everything else (board, score row, bar) hangs off those cell edges. The marks are the only unruly thing: seeded black-marker X and O scribbles made of several overlapping strokes, drawn on at the moment of play. One signal orange appears when something is decided: the winning strike, and the press of New Game.\n\nThe register is a Crouwel-style gridded specimen: neo-grotesque type, tabular numerals, sharp corners, ink on paper. Dark mode keeps the same plan on a blue-black ground. The board is the hero; chrome stays quiet, flat, and hairline-thin.",
+    "keyCharacteristics": [
+      "Visible cell grid; board edges land on construction lines (half-cell sheet margin).",
+      "Sharp corners everywhere, no radius anywhere.",
+      "Marker-scribble marks, deterministic per seed, drawn on stroke by stroke.",
+      "Orange is rare and means \"decided\" or \"act\".",
+      "Flat: depth comes from hairlines and tint, never shadow.",
+      "Light and dark follow the system."
+    ],
+    "rules": [
+      { "name": "The One Strike Rule", "body": "Orange marks a decision or an action, and nothing else. If a screen shows more than one orange element at rest, one of them is wrong.", "section": "colors" },
+      { "name": "The Blue Is Only Air Rule", "body": "Construction blue exists only as a low-alpha tint of the grid and cell states. It is never text, a border at full strength, or a button.", "section": "colors" },
+      { "name": "The Mark Reads Without Color Rule", "body": "X and O are distinguished by shape (diagonals versus loops), never by hue; orange is reserved for the strike.", "section": "colors" },
+      { "name": "The Weight Does The Work Rule", "body": "Hierarchy comes from weight and size in one family; do not introduce a second typeface.", "section": "typography" },
+      { "name": "The Cell Alignment Rule", "body": "Anything that sits under or beside the board is measured in the board's cell units (cqw), not in rem or percentages of the viewport.", "section": "layout" },
+      { "name": "The Flat Sheet Rule", "body": "Surfaces never lift; feedback is a tint change or a stroke, not a shadow.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do align every new element to cell edges (25cqw cell, 12.5cqw half-cell inset).",
+      "Do keep corners square and structure flat; use 1px hairlines for division.",
+      "Do build new marks, strikes, or illustrations from the scribble generator so they stay deterministic and share the marker hand.",
+      "Do keep hover, focus, and press states distinct (tint, outline, deeper tint) and make hover conditional on `(hover: hover)`.",
+      "Do gate any new animation behind `prefers-reduced-motion: no-preference`.",
+      "Do define colors as custom properties on `:root` with a dark override."
+    ],
+    "donts": [
+      "Don't use orange for anything that is not a decision or an action.",
+      "Don't use emoji, stock icons, or rounded pastel card styling.",
+      "Don't use full-strength blue; it is only a transparent tint.",
+      "Don't introduce a second typeface or color-coded X and O.",
+      "Don't use `disabled` on squares; keep `aria-disabled` so focus survives."
+    ]
+  }
+}

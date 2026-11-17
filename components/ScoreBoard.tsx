@@ -1,18 +1,19 @@
 import type { Scores } from "@/lib/gameReducer";
-import { MARKS } from "@/lib/marks";
 
 export function ScoreBoard({ scores }: { scores: Scores }) {
   const items: [string, number][] = [
-    [`${MARKS.X.name} wins`, scores.X],
-    [`${MARKS.O.name} wins`, scores.O],
+    ["X wins", scores.X],
     ["Draws", scores.draws],
+    ["O wins", scores.O],
   ];
   return (
     <dl className="scoreboard">
       {items.map(([label, value]) => (
         <div key={label}>
           <dt>{label}</dt>
-          <dd>{value}</dd>
+          <dd key={value} className="count" data-n={value}>
+            {value}
+          </dd>
         </div>
       ))}
     </dl>

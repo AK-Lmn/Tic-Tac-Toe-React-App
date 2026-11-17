@@ -18,33 +18,33 @@ async function play(moves: number[]) {
   return user;
 }
 
-// Cat: 0,1,2 (top row). Dog: 3,4.
-const CAT_WINS = [0, 3, 1, 4, 2];
+// X: 0,1,2 (top row). O: 3,4.
+const X_WINS = [0, 3, 1, 4, 2];
 const DRAW = [0, 1, 2, 4, 3, 5, 7, 6, 8];
 
 describe("<Game />", () => {
-  it("renders 9 empty squares and Cat's turn", () => {
+  it("renders 9 empty squares and X's turn", () => {
     render(<Game />);
     expect(squares()).toHaveLength(9);
-    expect(status()).toHaveTextContent("Cat's turn");
+    expect(status()).toHaveTextContent("X's turn");
   });
 
-  it("places the cat glyph and passes the turn to Dog", async () => {
+  it("draws an X and passes the turn to O", async () => {
     render(<Game />);
     await play([4]);
-    expect(sq(2, 2)).toHaveTextContent("🐱");
-    expect(status()).toHaveTextContent("Dog's turn");
+    expect(sq(2, 2)).toHaveAccessibleName("Square 2,2, X");
+    expect(status()).toHaveTextContent("O's turn");
   });
 
-  it("announces a cat win", async () => {
+  it("announces an X win", async () => {
     render(<Game />);
-    await play(CAT_WINS);
-    expect(status()).toHaveTextContent("Cat wins!");
+    await play(X_WINS);
+    expect(status()).toHaveTextContent("X wins!");
   });
 
   it("disables every square after a win so the board cannot change", async () => {
     render(<Game />);
-    const user = await play(CAT_WINS);
+    const user = await play(X_WINS);
     squares().forEach((s) => expect(s).toHaveAttribute("aria-disabled", "true"));
     await user.click(sq(3, 3));
     expect(sq(3, 3)).toHaveTextContent("");
@@ -61,17 +61,17 @@ describe("<Game />", () => {
     render(<Game />);
     const user = await play([4]);
     await user.click(sq(2, 2));
-    expect(status()).toHaveTextContent("Dog's turn");
-    expect(sq(2, 2)).toHaveTextContent("🐱");
+    expect(status()).toHaveTextContent("O's turn");
+    expect(sq(2, 2)).toHaveAccessibleName("Square 2,2, X");
   });
 
-  it("New Game after a win clears the board, keeps the score and gives Dog the first move", async () => {
+  it("New Game after a win clears the board, keeps the score and gives O the first move", async () => {
     render(<Game />);
-    const user = await play(CAT_WINS);
+    const user = await play(X_WINS);
     await user.click(screen.getByRole("button", { name: "New Game" }));
     squares().forEach((s) => expect(s).toHaveTextContent(""));
-    expect(counter("Cat wins")).toHaveTextContent("1");
-    expect(status()).toHaveTextContent("Dog's turn");
+    expect(counter("X wins")).toHaveTextContent("1");
+    expect(status()).toHaveTextContent("O's turn");
   });
 
   it("New Game mid-game clears the board and keeps counters at zero", async () => {
@@ -79,8 +79,8 @@ describe("<Game />", () => {
     const user = await play([0, 1]);
     await user.click(screen.getByRole("button", { name: "New Game" }));
     squares().forEach((s) => expect(s).toHaveTextContent(""));
-    expect(counter("Cat wins")).toHaveTextContent("0");
-    expect(counter("Dog wins")).toHaveTextContent("0");
+    expect(counter("X wins")).toHaveTextContent("0");
+    expect(counter("O wins")).toHaveTextContent("0");
   });
 
   it("plays a focused empty square with the Enter key", async () => {
@@ -88,7 +88,7 @@ describe("<Game />", () => {
     const user = userEvent.setup();
     sq(1, 1).focus();
     await user.keyboard("{Enter}");
-    expect(sq(1, 1)).toHaveTextContent("🐱");
+    expect(sq(1, 1)).toHaveAccessibleName("Square 1,1, X");
   });
 
   it("labels squares for screen readers", () => {
@@ -101,7 +101,7 @@ describe("<Game />", () => {
 describe("win highlight", () => {
   it("marks exactly the three winning squares with data-win", async () => {
     render(<Game />);
-    await play(CAT_WINS);
+    await play(X_WINS);
     const won = squares().filter((s) => s.getAttribute("data-win") === "true");
     expect(won).toEqual([sq(1, 1), sq(1, 2), sq(1, 3)]);
   });
@@ -114,5 +114,38 @@ describe("keyboard focus", () => {
     sq(1, 1).focus();
     await user.keyboard("{Enter}");
     expect(sq(1, 1)).toHaveFocus();
+  });
+});
+
+describe("marks and win sweep", () => {
+  it("contains no emoji anywhere in the interface", async () => {
+    const { container } = render(<Game />);
+    await play(DRAW);
+    expect(container.textContent).not.toMatch(/\p{Extended_Pictographic}/u);
+  });
+
+  it("draws an X as several marker strokes inside the played square", async () => {
+    render(<Game />);
+    await play([4]);
+    expect(sq(2, 2).querySelectorAll("svg path").length).toBeGreaterThanOrEqual(5);
+  });
+
+  it("draws an O as several marker loops", async () => {
+    render(<Game />);
+    await play([4, 0]);
+    expect(sq(1, 1).querySelectorAll("svg path").length).toBeGreaterThanOrEqual(3);
+  });
+
+  it("strikes the winning line only when someone has won", async () => {
+    const { container } = render(<Game />);
+    expect(container.querySelector("[data-win-line]")).toBeNull();
+    await play(X_WINS);
+    expect(container.querySelector("[data-win-line]")).not.toBeNull();
+  });
+
+  it("does not strike a line on a draw", async () => {
+    const { container } = render(<Game />);
+    await play(DRAW);
+    expect(container.querySelector("[data-win-line]")).toBeNull();
   });
 });

@@ -1,18 +1,20 @@
-import type { Cell } from "@/lib/game";
-import { MARKS } from "@/lib/marks";
+import type { Cell, Player } from "@/lib/game";
+import { Mark } from "./Mark";
 
 type Props = {
   index: number;
   value: Cell;
+  /** Whose mark a hover preview shows. */
+  next: Player;
   onPlay: (index: number) => void;
   disabled: boolean;
   highlight: boolean;
 };
 
-export function Square({ index, value, onPlay, disabled, highlight }: Props) {
+export function Square({ index, value, next, onPlay, disabled, highlight }: Props) {
   const row = Math.floor(index / 3) + 1;
   const col = (index % 3) + 1;
-  const label = `Square ${row},${col}, ${value ? MARKS[value].name : "empty"}`;
+  const label = `Square ${row},${col}, ${value ?? "empty"}`;
   return (
     <button
       type="button"
@@ -22,7 +24,11 @@ export function Square({ index, value, onPlay, disabled, highlight }: Props) {
       className="square"
       data-win={highlight}
     >
-      <span aria-hidden="true">{value ? MARKS[value].glyph : ""}</span>
+      {value ? (
+        <Mark player={value} seed={index} draw />
+      ) : disabled ? null : (
+        <Mark player={next} seed={index} className="ghost" />
+      )}
     </button>
   );
 }

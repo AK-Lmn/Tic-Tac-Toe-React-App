@@ -42,3 +42,8 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# impeccable scratch
+.impeccable/hook.cache.json
+.impeccable/questions/
+.impeccable/review/
