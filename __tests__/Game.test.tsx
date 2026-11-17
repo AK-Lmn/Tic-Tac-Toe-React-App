@@ -97,3 +97,12 @@ describe("<Game />", () => {
     expect(within(screen.getByRole("group", { name: /board/i })).getAllByRole("button")).toHaveLength(9);
   });
 });
+
+describe("win highlight", () => {
+  it("marks exactly the three winning squares with data-win", async () => {
+    render(<Game />);
+    await play(CAT_WINS);
+    const won = squares().filter((s) => s.getAttribute("data-win") === "true");
+    expect(won).toEqual([sq(1, 1), sq(1, 2), sq(1, 3)]);
+  });
+});

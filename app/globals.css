@@ -1,26 +1,150 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --bg: #fff4e0;
+  --ink: #2b1d12;
+  --ink-soft: #6b5440;
+  --tile: #fffaf0;
+  --tile-edge: #e8cfa6;
+  --cat: #9a4a05;
+  --dog: #1d5f9e;
+  --win: #ffd166;
+  --focus: #1d5f9e;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg: #1b1a2e;
+    --ink: #fdf3e3;
+    --ink-soft: #c2b8d6;
+    --tile: #28264a;
+    --tile-edge: #43406e;
+    --cat: #ffb15c;
+    --dog: #7fb8f0;
+    --win: #6b5bd6;
+    --focus: #ffd166;
   }
 }
 
+@theme inline {
+  --font-sans: var(--font-fredoka);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-fredoka), system-ui, sans-serif;
+}
+
+.game {
+  margin: auto;
+  width: min(92vw, 28rem);
+  padding: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.game h1 {
+  font-size: clamp(1.75rem, 8vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.status {
+  font-size: 1.25rem;
+  font-weight: 500;
+  min-height: 1.75rem;
+}
+
+.board {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.square {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  font-size: clamp(2.25rem, 14vw, 4rem);
+  line-height: 1;
+  background: var(--tile);
+  border: 2px solid var(--tile-edge);
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: transform 120ms ease, background-color 120ms ease;
+}
+
+.square:disabled {
+  cursor: default;
+}
+
+.square:not(:disabled):hover {
+  transform: translateY(-2px);
+  background: var(--bg);
+}
+
+.square[data-win="true"] {
+  background: var(--win);
+  border-color: var(--ink);
+}
+
+.new-game {
+  background: var(--ink);
+  color: var(--bg);
+  font-weight: 600;
+  font-size: 1.125rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.square:focus-visible,
+.new-game:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.scoreboard {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.scoreboard dt {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.scoreboard dd {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.scoreboard div:nth-child(1) dd {
+  color: var(--cat);
+}
+
+.scoreboard div:nth-child(2) dd {
+  color: var(--dog);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .square[data-win="true"] {
+    animation: pulse 900ms ease-in-out infinite alternate;
+  }
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
 }

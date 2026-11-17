@@ -20,7 +20,7 @@ export function Square({ index, value, onPlay, disabled, highlight }: Props) {
       disabled={disabled}
       onClick={() => onPlay(index)}
       className="square"
-      data-highlight={highlight}
+      data-win={highlight}
     >
       <span aria-hidden="true">{value ? MARKS[value].glyph : ""}</span>
     </button>
